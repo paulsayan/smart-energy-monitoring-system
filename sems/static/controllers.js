@@ -20,7 +20,8 @@ angular.module('myApp').controller('loginController',
         // handle error
         .catch(function () {
           $scope.error = true;
-          $scope.errorMessage = "Invalid username and/or password";
+          //$scope.errorMessage = "Invalid username and/or password";
+          $scope.errorMessage = AuthService.getLoginData().msg;
           $scope.disabled = false;
           $scope.loginForm = {};
         });
@@ -42,6 +43,14 @@ angular.module('myApp').controller('logoutController',
         });
 
     };
+
+}]);
+
+angular.module('myApp').controller('homeController',
+  ['$scope', '$location', 'AuthService',
+  function ($scope, $location, AuthService) {
+
+    $scope.logindata=AuthService.getLoginData();
 
 }]);
 

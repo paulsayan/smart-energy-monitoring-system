@@ -8,24 +8,35 @@ import datetime
 import jwt
 
 class Device():
+	
+	def __init__(self):
+		self.name=""
+		self.state=False
+		self.owner=0
+		self.auth_token=""
+		self.id=""
+
+	"""
 	def __init__(self,owner1,name1):
 		self.name=name1
 		self.state=False
-		self.instpower=0.0
-		self.energyc=0.0
 		self.owner=int(owner1)
 		self.auth_token=self.generateauthtoken()
 		self.id=self.generateid(owner1)
+	"""
 
-	def generateid(self,owner1):
+	#def generateid(self,owner1):
+	def generateid(self):
 		min_char = 8
 		max_char = 8
 		allchar = string.ascii_letters + string.digits
 		randomstring = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
-		return owner1+"_"+randomstring
+		#return owner1+"_"+randomstring
+		self.id=str(self.owner)+"_"+randomstring
 
 	def generateauthtoken(self):
-		return str(uuid.uuid4())
+		#return str(uuid.uuid4())
+		self.auth_token=str(uuid.uuid4())
 
 	def getid(self):
 		return self.id
@@ -33,31 +44,152 @@ class Device():
 	def getname(self):
 		return self.name
 
-	def getinstpower(self):
-		return self.instpower
-
-	def getenergyc(self):
-		return self.energyc
-
 	def getowner(self):
 		return self.owner
 
 	def getstate(self):
 		return self.state
 
+	def setname(self,name1):
+		self.name=name1
+	
+	def setstate(self,state1):
+		self.state=state1
+	
+	def setowner(self,owner1):
+		self.owner=owner1
+	
+
+	def toDict(self):
+		d={}
+		d['id']=self.id
+		d['name']=self.name
+		d['state']=self.state
+		d['owner']=self.owner
+		d['auth_token']=self.auth_token
+		return d
+
+	@classmethod
+	def rowtoObj(cls,row):
+		d=Device()
+		d.id=row[0]
+		d.name=row[1]
+		d.state=bool(row[2])
+		d.owner=int(row[3])
+		d.auth_token=row[4]
+		return d
+
+
+	@classmethod
+	def getDeviceById(cls,id1):
+		dao=DAOClass()
+		sql="select * from devices where id='"+id1+"'"
+		print(sql)
+		rows=dao.getData(sql)
+		print(rows)
+		if(rows==None):
+			msg="Database Error"
+			print(msg)
+			return msg
+		elif (rows==[]):
+			msg="Device Not Found"
+			print(msg)
+			return msg
+		else:
+			r=cls.rowtoObj(rows[0])
+			print(r)
+			return r
+
+	@classmethod
+	def getDevicesByOwner(cls,owner1):
+		dao=DAOClass()
+		sql="select * from devices where owner="+str(owner1)
+		print(sql)
+		rows=dao.getData(sql)
+		print(rows)
+		if(rows==None):
+			msg="Database Error"
+			print(msg)
+			return msg
+		elif (rows==[]):
+			msg="No Devices Found"
+			print(msg)
+			return msg
+		else:
+			r=[cls.rowtoObj(row) for row in rows]
+			print(r)
+			return r
+
+	@classmethod
+	def deleteDeviceById(cls,id1):
+		dao=DAOClass()
+		sql="delete from devices where id='"+id1+"'"
+		print(sql)
+		r=dao.updateData(sql)
+		print(r)
+		return r
+			
+
 	def addDevice(self):
 		dao=DAOClass()
 		sql="select * from devices where owner="+str(self.owner)+" and name='"+self.name+"'"
 		print(sql)
-		r=dao.getData(sql)
-		print(r)
-		if(r==[]):
+		rows=dao.getData(sql)
+		print(rows)
+		if(rows==[]):
 			sql="insert into devices(id,name,state,owner,authtoken) values('"+self.id+"','"+self.name+"',"+str(int(self.state))+","+str(self.owner)+",'"+self.auth_token+"')"
 			print(sql)
 			r=dao.updateData(sql)
-			return r
+			if(r==True):
+				return r
+			else:
+				msg="Database Error"
+				print(msg)
+				return msg
+
+		elif(rows==None):
+			msg="Database Error"
+			print(msg)
+			return msg
 		else:
-			return False
+			msg="Another Device having same name found."
+			print(msg)
+			return msg
+
+	@classmethod
+	def updateDeviceStateById(cls,id1,state1):
+		dao=DAOClass()
+		sql="update table devices set state="+str(int(state1))+" where id='"+id1+"'"
+		print(sql)
+		r=dao.updateData(sql)
+		return r
+
+
+	def updateDevice(self):
+		dao=DAOClass()
+		sql="select * from devices where owner="+str(self.owner)+" and name='"+self.name+"'"
+		print(sql)
+		rows=dao.getData(sql)
+		print(rows)
+		if(rows==[]):
+			sql="update table devices set name='"+self.name+"'"
+			print(sql)
+			r=dao.updateData(sql)
+			if(r==True):
+				return r
+			else:
+				msg="Database Error"
+				print(msg)
+				return msg
+
+		elif(rows==None):
+			msg="Database Error"
+			print(msg)
+			return msg
+		else:
+			msg="Another Device having same name found."
+			print(msg)
+			return msg
 
 
 
@@ -127,7 +259,7 @@ class User():
 		sql="select * from users where id='"+id1+"'"
 		print("getUserById: "+sql)
 		rows=dao.getData(sql)
-		if not rows:
+		if(rows==None):
 			msg="Database Error"
 			print(msg)
 			return msg

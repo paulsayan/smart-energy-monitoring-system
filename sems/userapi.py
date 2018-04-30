@@ -32,6 +32,7 @@ class UserLoginAPI(Resource):
 			if(u.checkpwd(post_data.get('pwd'))):
 				status=True
 				session['logged_in']=True
+				session['user_id']=str(u.getid())
 				d=u.toDict()
 
 			else:
@@ -48,9 +49,11 @@ class UserLoginAPI(Resource):
 class UserLogoutAPI(Resource):
 	def get(self):
 		session.pop('logged_in', None)
+		session.pop('user_id', None)
 		return jsonify({'result': 'success'})
 	def post(self):
 		session.pop('logged_in', None)
+		session.pop('user_id', None)
 		return jsonify({'result': 'success'})
 
 class UserStatusAPI(Resource):
