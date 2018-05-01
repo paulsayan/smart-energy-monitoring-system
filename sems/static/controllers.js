@@ -54,6 +54,16 @@ angular.module('myApp').controller('homeController',
 
 }]);
 
+angular.module('myApp').controller('profileController',
+  ['$scope', '$location', 'AuthService',
+  function ($scope, $location, AuthService) {
+
+    $scope.logindata=AuthService.getLoginData();
+    
+
+}]);
+
+
 angular.module('myApp').controller('registerController',
   ['$scope', '$location', 'AuthService',
   function ($scope, $location, AuthService) {

@@ -1,6 +1,65 @@
 <div ng-controller="homeController">
-  <h1>Welcome {{logindata.name}}. </h1>
-</div>
-<div ng-controller="logoutController">
-  <a ng-click='logout()' class="btn btn-default">Logout</a>
-</div>
+
+<div class="app" id="app">
+
+    <!-- ############ LAYOUT START-->
+      <div class="center-block w-xxl2 w-auto-xs p-y-md">
+        <div class="navbar">
+          <div class="pull-center">
+    
+            <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+            
+          </div>
+        </div>
+        <div class="p-a-md box-color r box-shadow-z1 text-color m-a">
+            <h3>Smart Energy Monitoring App </h3>
+            <br>
+            
+            <div class="clearfix m-b nav-active-dark">
+                <ul class="nav nav-pills" ui-nav>
+                  
+                  <li class="nav-item active">
+                  <a class="nav-link" href="#/">Home</a>
+                  </li>
+                  
+                  <li class="nav-item">
+                  <a class="nav-link"  href="#/devices">Devices</a>
+                  </li>
+
+                  <li class="nav-item">
+                  <a class="nav-link"  href="#/profile">{{logindata.name}}'s Profile</a>
+                  </li>
+                  
+                  <div ng-controller="logoutController">
+                  <li class="nav-item">
+                  <a class="nav-link" ng-click='logout()' >Logout</a>
+                  </li>
+                  </div>
+
+                </ul>
+              </div>
+
+            
+<!-- 
+          <form name="form">
+            <button type="button" class="btn primary btn-block p-x-md" ng-disabled="disabled">Devices</button>
+            
+            <br>
+
+            <div ng-controller="logoutController">
+                <button type="button" class="btn primary btn-block p-x-md" ng-click='logout()'>Logout</button>
+            </div>
+          </form>
+-->
+
+        </div>
+   
+        
+      </div>
+    
+    <!-- ############ LAYOUT END-->
+    
+    </div>
+    
+  </div>
+  

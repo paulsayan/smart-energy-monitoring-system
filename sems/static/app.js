@@ -29,6 +29,11 @@ myApp.config(function ($routeProvider) {
       template: '<h1>This is page two!</h1>',
       access: {restricted: false}
     })
+    .when('/profile', {
+      templateUrl: 'static/partials/profile.html',
+      controller: 'profileController',
+      access: {restricted: true}
+    })
     .otherwise({
       redirectTo: '/'
     });
