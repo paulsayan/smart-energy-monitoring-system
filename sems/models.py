@@ -159,7 +159,7 @@ class Device():
 	@classmethod
 	def updateDeviceStateById(cls,id1,state1):
 		dao=DAOClass()
-		sql="update table devices set state="+str(int(state1))+" where id='"+id1+"'"
+		sql="update devices set state="+str(int(state1))+" where id='"+id1+"'"
 		print(sql)
 		r=dao.updateData(sql)
 		return r
@@ -172,7 +172,7 @@ class Device():
 		rows=dao.getData(sql)
 		print(rows)
 		if(rows==[]):
-			sql="update table devices set name='"+self.name+"'"
+			sql="update devices set name='"+self.name+"' where id='"+self.id+"'"
 			print(sql)
 			r=dao.updateData(sql)
 			if(r==True):
@@ -322,7 +322,7 @@ class User():
 
 	def updateUserById(self):
 		dao=DAOClass()
-		sql="update table users set name='"+self.name+"', email='"+self.email+"', pwd='"+self.pwd+"' where id="+self.id
+		sql="update users set name='"+self.name+"', email='"+self.email+"', pwd='"+self.pwd+"' where id="+self.id
 		print("updateUserById: "+sql)
 		r=dao.updateData(sql)
 		if(r==True):

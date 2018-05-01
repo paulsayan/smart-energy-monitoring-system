@@ -21,5 +21,6 @@ api.add_resource(UserLogoutAPI,'/api/user/logout',endpoint='user_logout')
 api.add_resource(UserStatusAPI,'/api/user/status',endpoint='user_status')
 
 api.add_resource(DevicesByOwnerAPI,'/api/devices/<int:owner_id>',endpoint='devicesbyowner')
-
+api.add_resource(DeviceByIdAPI,'/api/device/<device_id>',endpoint='devicebyid')
+api.add_resource(DeviceStateByIdAPI,'/api/device/<device_id>/state',endpoint='devicestatebyid')
 

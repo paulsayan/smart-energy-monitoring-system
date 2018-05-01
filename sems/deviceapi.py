@@ -44,3 +44,76 @@ class DevicesByOwnerAPI(Resource):
             response['msg']="Device Successfully Added."
             response['result']=True
             return jsonify(response)
+
+
+class DeviceByIdAPI(Resource):
+    def get(self,device_id):
+        d=Device.getDeviceById(device_id)
+        if(isinstance(d,Device)):
+            response=d.toDict()
+            response['result']=True
+            return jsonify(response)
+        else:
+            response={}
+            response['msg']=d
+            response['result']=True
+            return jsonify(response)
+    
+    def post(self,device_id):
+        post_data=request.get_json()
+        d=Device.getDeviceById(device_id)
+        if not(isinstance(d,Device)):
+            response={}
+            response['msg']=d
+            response['result']=False
+            return jsonify(response)
+
+        d.setname(post_data.get('name'))
+
+        r=d.updateDevice()
+        if(isinstance(r,str)):
+            response={}
+            response['msg']=r
+            response['result']=False
+            return jsonify(response)
+        else:
+            response={}
+            response['msg']="Device Updated Successfully."
+            response['result']=True
+            return jsonify(response)
+        
+
+class DeviceStateByIdAPI(Resource):
+    def get(self,device_id):
+        d=Device.getDeviceById(device_id)
+        if(isinstance(d,Device)):
+            response={}
+            response['state']=d.getstate()
+            response['result']=True
+            return jsonify(response)
+        else:
+            response={}
+            response['msg']=d
+            response['result']=True
+            return jsonify(response)
+        
+    def post(self,device_id):
+        post_data=request.get_json()
+        d=Device.getDeviceById(device_id)
+        if not(isinstance(d,Device)):
+            response={}
+            response['msg']=d
+            response['result']=False
+            return jsonify(response)
+
+        r=Device.updateDeviceStateById(device_id,post_data.get('state'))
+        if(r==False):
+            response={}
+            response['msg']="Device State Update Unsuccessful."
+            response['result']=False
+            return jsonify(response)
+        else:
+            response={}
+            response['msg']="Device State Updated Successfully."
+            response['result']=True
+            return jsonify(response)
