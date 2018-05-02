@@ -4,6 +4,7 @@ from flask import redirect, url_for, request, render_template, jsonify, make_res
 from flask_restful import Resource, Api
 from userapi import *
 from deviceapi import *
+from realtimeapi import DeviceRealTimeAPI
 
 api=Api(app)
 
@@ -23,4 +24,6 @@ api.add_resource(UserStatusAPI,'/api/user/status',endpoint='user_status')
 api.add_resource(DevicesByOwnerAPI,'/api/devices/<int:owner_id>',endpoint='devicesbyowner')
 api.add_resource(DeviceByIdAPI,'/api/device/<device_id>',endpoint='devicebyid')
 api.add_resource(DeviceStateByIdAPI,'/api/device/<device_id>/state',endpoint='devicestatebyid')
+
+api.add_resource(DeviceRealTimeAPI,'/api/device/<device_id>/realtimedata',endpoint='device_realtimedata')
 
