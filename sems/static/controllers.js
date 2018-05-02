@@ -95,6 +95,36 @@ angular.module('myApp').controller('addDeviceController',
 
 }]);
 
+angular.module('myApp').controller('deviceSettingsController',
+  ['$scope', '$location', 'AuthService', '$http','$routeParams',
+  function ($scope, $location, AuthService, $http, $routeParams) {
+
+    $scope.logindata=AuthService.getLoginData();
+
+    $scope.device=null;
+    $scope.deviceFound=false;
+
+    var url='/api/device/'+$routeParams.device_id;
+    $http.get(url).then( function(response) {
+      if(response.data.result)
+      {
+        $scope.device=response.data;
+        $scope.deviceFound=true;
+        $scope.device.state=($scope.device.state==true)?"ON":"OFF";
+      }
+      else{
+        $scope.device=null;
+        $scope.deviceFound=false;
+      }
+    
+    });
+
+    $scope.getState=function(){
+        return $scope.device.state?'ON':'OFF';
+    };
+    
+}]);
+
 
 angular.module('myApp').controller('devicesController',
   ['$scope', '$location', 'AuthService', '$http', '$route',
@@ -157,6 +187,14 @@ angular.module('myApp').controller('devicesController',
       
     };
 
+    /*
+    $scope.gotoDeviceSettings=function(device_id){
+      
+      var url='#/device_settings/'+device_id;
+      $location.path(url);
+
+    };
+    */
 
     /*
     DevicesDataService.fetchDeviceList($scope.logindata.id)

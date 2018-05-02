@@ -44,6 +44,11 @@ myApp.config(function ($routeProvider) {
       controller: 'addDeviceController',
       access: {restricted: true}
     })
+    .when('/device_settings/:device_id', {
+      templateUrl: 'static/partials/device_settings.html',
+      controller: 'deviceSettingsController',
+      access: {restricted: true}
+    })
     .otherwise({
       redirectTo: '/'
     });
