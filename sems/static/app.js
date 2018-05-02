@@ -34,6 +34,16 @@ myApp.config(function ($routeProvider) {
       controller: 'profileController',
       access: {restricted: true}
     })
+    .when('/devices', {
+      templateUrl: 'static/partials/devices.html',
+      controller: 'devicesController',
+      access: {restricted: true}
+    })
+    .when('/add_device', {
+      templateUrl: 'static/partials/add_device.html',
+      controller: 'addDeviceController',
+      access: {restricted: true}
+    })
     .otherwise({
       redirectTo: '/'
     });

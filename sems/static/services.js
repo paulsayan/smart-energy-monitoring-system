@@ -130,3 +130,48 @@ angular.module('myApp').factory('AuthService',
     }
 
 }]);
+
+/*
+
+angular.module('myApp').factory('DevicesDataService',
+  ['$q', '$timeout', '$http',
+  function ($q, $timeout, $http) {
+
+    var devicelist=null;
+    
+    return ({
+      getDeviceList : getDeviceList,
+      fetchDeviceList : fetchDeviceList
+    });
+
+    function getDeviceList()
+    {
+      return devicelist;
+    }
+
+    function fetchDeviceList(owner_id) {
+      return $http.get('/api/devices/'+owner_id)
+      // handle success
+      .success(function (data) {
+        if(data.result){
+          devicelist=data.devicelist;
+          
+        } 
+        else {
+          devicelist=data.msg;
+          
+        }
+      })
+      // handle error
+      .error(function (data) {
+        devicelist="Data Fetch Error!";
+        
+      });
+
+      //return devicelist;
+    }
+
+
+}]);
+
+*/

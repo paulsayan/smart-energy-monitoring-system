@@ -81,6 +81,27 @@ class DeviceByIdAPI(Resource):
             response['msg']="Device Updated Successfully."
             response['result']=True
             return jsonify(response)
+
+    def delete(self,device_id):
+        d=Device.getDeviceById(device_id)
+        if not(isinstance(d,Device)):
+            response={}
+            response['msg']=d
+            response['result']=False
+            return jsonify(response)
+        
+        r=Device.deleteDeviceById(device_id)
+        if(r==False):
+            response={}
+            response['msg']="Device Deletion Unsuccessful."
+            response['result']=False
+            return jsonify(response)
+        else:
+            response={}
+            response['msg']="Device deleted successfully."
+            response['result']=True
+            return jsonify(response)
+
         
 
 class DeviceStateByIdAPI(Resource):
