@@ -44,9 +44,19 @@ myApp.config(function ($routeProvider) {
       controller: 'addDeviceController',
       access: {restricted: true}
     })
-    .when('/device_settings/:device_id', {
-      templateUrl: 'static/partials/device_settings.html',
-      controller: 'deviceSettingsController',
+    .when('/device/:device_id/info', {
+      templateUrl: 'static/partials/device_info.html',
+      controller: 'deviceInfoController',
+      access: {restricted: true}
+    })
+    .when('/device/:device_id/sessions', {
+      templateUrl: 'static/partials/sessions.html',
+      controller: 'sessionsController',
+      access: {restricted: true}
+    })
+    .when('/device/:device_id/realtimedata', {
+      templateUrl: 'static/partials/realtimedata.html',
+      controller: 'realtimeDataController',
       access: {restricted: true}
     })
     .otherwise({

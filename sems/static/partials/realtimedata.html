@@ -1,0 +1,75 @@
+<div ng-controller="realtimeDataController">
+
+        <div class="app" id="app">
+        
+            <!-- ############ LAYOUT START-->
+              <div class="center-block w-xxl2 w-auto-xs p-y-md">
+                <div class="navbar">
+                  <div class="pull-center">
+            
+                    <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+                    
+                  </div>
+                </div>
+                <div class="p-a-md box-color r box-shadow-z1 text-color m-a">
+                    <h3>Smart Energy Monitoring App </h3>
+                    <br>
+                    
+                    <div class="clearfix m-b nav-active-dark">
+                        <ul class="nav nav-pills" ui-nav>
+                          
+                          <li class="nav-item">
+                          <a class="nav-link" href="#/">Home</a>
+                          </li>
+                          
+                          <li class="nav-item">
+                          <a class="nav-link"  href="#/devices">Devices</a>
+                          </li>
+        
+                          <li class="nav-item">
+                          <a class="nav-link"  href="#/profile">{{logindata.name}}'s Profile</a>
+                          </li>
+                          
+                          
+                          <li class="nav-item" ng-controller="logoutController">
+                          <a class="nav-link" ng-click='logout()' >Logout</a>
+                          </li>
+                          
+        
+                        </ul>
+                      </div>
+
+                      <br>
+
+                        <div ng-if="deviceON">
+                            <div class="box-color p-a primary">
+                              <div class="pull-right m-l">
+                                <span class="w-40 dker text-center rounded">
+                                  <i class="material-icons">&#xe63c;</i>
+                                </span>
+                              </div>
+                              <div class="clear">
+                                <h4 class="m-a-0 text-md"><p ng-bind="device.instpower"></p> 
+                                <span class="text-sm">Watt(s)</span></h4>
+                                
+                                <small class="text-muted">Current Session : {{device.currentsession}}</small>
+                              </div>
+                            </div>
+                        </div>
+                    
+                        <br>
+
+                        <p ng-if="!deviceON">Device is in OFF state now.</p>
+
+        
+                </div>
+           
+                
+              </div>
+            
+            <!-- ############ LAYOUT END-->
+            
+            </div>
+            
+</div>
+          

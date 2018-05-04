@@ -29,5 +29,17 @@ api.add_resource(DeviceStateByIdAPI,'/api/device/<device_id>/state',endpoint='de
 
 api.add_resource(DeviceRealTimeAPI,'/api/device/<device_id>/realtimedata',endpoint='device_realtimedata')
 
-api.add_resource(SessionsByDeviceAPI,'/api/sessions/<device_id>/',endpoint='sessionsbydevice')
-api.add_resource(SessionByIdAPI,'/api/session/<session_id>/',endpoint='sessionbyid')
+api.add_resource(SessionsByDeviceAPI,'/api/sessions/<device_id>',endpoint='sessionsbydevice')
+api.add_resource(SessionByIdAPI,'/api/session/<session_id>',endpoint='sessionbyid')
+
+
+"""
+@app.route('/api/sessions/<device_id>/')
+def sessionsapi(device_id):
+	return redirect('/api/sessions/'+device_id,301)
+
+@app.route('/api/session/<session_id>/')
+def sessionapi(session_id):
+	return redirect('/api/session/'+session_id,301)
+"""
+

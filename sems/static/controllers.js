@@ -95,7 +95,41 @@ angular.module('myApp').controller('addDeviceController',
 
 }]);
 
-angular.module('myApp').controller('deviceSettingsController',
+angular.module('myApp').controller('realtimeDataController',
+  ['$scope', '$location', 'AuthService', '$http','$routeParams', '$interval',
+  function ($scope, $location, AuthService, $http, $routeParams, $interval) {
+
+    $scope.logindata=AuthService.getLoginData();
+
+    $scope.getrealtimedata=function(){
+    
+      var url='/api/device/'+$routeParams.device_id+'/realtimedata';
+      $http.get(url).then( function(response) {
+        if(response.data.result)
+        {
+          $scope.device=response.data;
+          $scope.deviceON=true;
+        
+        }
+        else{
+          $scope.device=null;
+          $scope.deviceON=false;
+        }
+    
+      });
+
+      console.log("Interval Occurred.");
+      console.log($scope.device);
+
+    };
+
+    $scope.datafetch_timer=$interval(function(){$scope.getrealtimedata(); }, 2000);
+
+    $scope.$on('$destroy',function(){$interval.cancel($scope.datafetch_timer);  });
+    
+}]);
+
+angular.module('myApp').controller('deviceInfoController',
   ['$scope', '$location', 'AuthService', '$http','$routeParams',
   function ($scope, $location, AuthService, $http, $routeParams) {
 
@@ -217,6 +251,35 @@ angular.module('myApp').controller('devicesController',
 
 
 }]);
+
+angular.module('myApp').controller('sessionsController',
+  ['$scope', '$location', 'AuthService', '$http','$routeParams',
+  function ($scope, $location, AuthService, $http, $routeParams) {
+
+    $scope.logindata=AuthService.getLoginData();
+
+    var url='/api/sessions/'+$routeParams.device_id;
+    $http.get(url).then( function(response) {
+      if(response.data.result)
+      {
+        $scope.sessionlist=response.data.sessionlist;
+        $scope.sessionlistfound=response.data.result;
+      }
+      else{
+        $scope.sessionlistlist=null;
+        $scope.sessionlistfound=response.data.result;
+        $scope.errorMessage=response.data.msg;
+      }
+      
+      console.log(response.data);
+    });
+
+    console.log($scope.sessionlist);
+    console.log($scope.sessionlistfound);
+
+  }]);
+
+
 
 angular.module('myApp').controller('registerController',
   ['$scope', '$location', 'AuthService',
