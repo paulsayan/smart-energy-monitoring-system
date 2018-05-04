@@ -256,7 +256,7 @@ class User():
 	@classmethod
 	def getUserById(cls,id1):
 		dao=DAOClass()
-		sql="select * from users where id='"+id1+"'"
+		sql="select * from users where id="+str(id1)
 		print("getUserById: "+sql)
 		rows=dao.getData(sql)
 		if(rows==None):
@@ -364,4 +364,133 @@ class User():
 	"""
 
 
+class Session():
+	def __init__(self,device_id=None,st_time=None):
+		self.id=0
+		self.deviceid=device_id
+		self.start_time=st_time
+		self.end_time=None
+		self.energy_consumed=0
+
+	def getid(self):
+		return self.id
+
+	def getdeviceid(self):
+		return self.deviceid
+
+	def getstarttime(self):
+		return self.start_time
+
+	def getendtime(self):
+		return self.end_time
+
+	def getenergyconsumed(self):
+		return self.energy_consumed
+
+	def setid(self,id1):
+		self.id=id1
+
+	def setendtime(self,endtime):
+		self.end_time=endtime
+
+	def setenergyconsumed(self,energyc):
+		self.energy_consumed=energyc
+
+	@classmethod
+	def rowtoObj(cls,row):
+		s=Session(row[1],row[2])
+		s.id=row[0]
+		s.end_time=row[3]
+		s.energy_consumed=row[4]
+		return s
+
+	def toDict(self):
+		s={}
+		s['id']=self.id
+		s['device_id']=self.deviceid
+		s['start_time']=self.start_time
+		s['end_time']=self.end_time
+		s['energy_consumed']=self.energy_consumed
+		return s
+
+
+	@classmethod
+	def getSessionsByDevice(cls,device_id):
+		dao=DAOClass()
+		sql="select * from sessions where device_id='"+device_id+"' and end_time is NOT NULL"
+		print(sql)
+		rows=dao.getData(sql)
+		print(rows)
+		if(rows==None):
+			msg="Database Error"
+			print(msg)
+			return msg
+		elif (rows==[]):
+			msg="No Sessions Found"
+			print(msg)
+			return msg
+		else:
+			r=[cls.rowtoObj(row) for row in rows]
+			print(r)
+			return r
+
+	@classmethod
+	def getSessionById(cls,id1):
+		dao=DAOClass()
+		sql="select * from sessions where id="+id1
+		print(sql)
+		rows=dao.getData(sql)
+		if(rows==None):
+			msg="Database Error"
+			print(msg)
+			return msg
+		elif (rows==[]):
+			msg="Session Not Found"
+			print(msg)
+			return msg
+		else:
+			r=cls.rowtoObj(rows[0])
+			print(r)
+			return r
+
 	
+	def addSession(self):		
+		dao=DAOClass()
+		sql="insert into sessions(device_id,start_time) values('"+self.deviceid+"',now())"
+		r=dao.updateData(sql)
+		if(r==True):
+			sql="select id from sessions where device_id='"+self.deviceid+"' and end_time is NULL"
+			rows=dao.getData(sql)
+			if(rows==None):
+				return "Database Error"
+			else:
+				self.id=rows[0][0]
+				return int(self.id)
+		else:
+			return "Database Error"
+
+	def updateSession(self):
+		dao=DAOClass()
+		sql="update sessions set end_time=now(), energy_consumed="+str(self.energy_consumed)+" where id="+str(self.id)
+		print(sql)
+		r=dao.updateData(sql)
+		return r
+
+
+	@classmethod
+	def deleteSessionsByDevice(cls,device_id):
+		dao=DAOClass()
+		sql="delete from sessions where device_id='"+device_id+"'"
+		print(sql)
+		r=dao.updateData(sql)
+		print(r)
+		return r
+
+	@classmethod
+	def deleteSessionById(cls,id1):
+		dao=DAOClass()
+		sql="delete from sessions where id="+str(id1)
+		print(sql)
+		r=dao.updateData(sql)
+		print(r)
+		return r
