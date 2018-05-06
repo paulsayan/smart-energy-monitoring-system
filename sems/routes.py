@@ -5,7 +5,7 @@ from flask_restful import Resource, Api
 
 from userapi import UserLoginAPI,UserLogoutAPI,UserRegistrationAPI,UserStatusAPI
 from deviceapi import DeviceByIdAPI,DevicesByOwnerAPI,DeviceStateByIdAPI
-from realtimeapi import DeviceRealTimeAPI
+from realtimeapi import DeviceRealTimeAPI,DevicesRealTimeAPI
 from sessionapi import SessionByIdAPI,SessionsByDeviceAPI
 from billsapi import AnyBillAPI
 
@@ -29,6 +29,7 @@ api.add_resource(DeviceByIdAPI,'/api/device/<device_id>',endpoint='devicebyid')
 api.add_resource(DeviceStateByIdAPI,'/api/device/<device_id>/state',endpoint='devicestatebyid')
 
 api.add_resource(DeviceRealTimeAPI,'/api/device/<device_id>/realtimedata',endpoint='device_realtimedata')
+api.add_resource(DevicesRealTimeAPI,'/api/devices/<int:owner_id>/realtimedata',endpoint='devices_realtimedata')
 
 api.add_resource(SessionsByDeviceAPI,'/api/sessions/<device_id>',endpoint='sessionsbydevice')
 api.add_resource(SessionByIdAPI,'/api/session/<session_id>',endpoint='sessionbyid')

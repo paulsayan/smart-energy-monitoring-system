@@ -29,3 +29,35 @@ class DeviceRealTimeAPI(Resource):
         device['result']=True
         return jsonify(device)
 
+class DevicesRealTimeAPI(Resource):
+    def __init__(self):
+        self.db=redis.StrictRedis(host="localhost", port=6379, db=0)
+    
+    def get(self,owner_id):
+
+        devicelist=Device.getDevicesByOwner(owner_id)
+        if(isinstance(devicelist,str)):
+            response={}
+            response['msg']=devicelist
+            response['result']=False
+            return jsonify(response)
+
+        deviceidlist=[device.getid() for device in devicelist if device.getstate()==True]
+        if(deviceidlist==[]):
+            response={}
+            response['msg']="No Devices with ongoing Sessions found."
+            response['result']=False
+            return jsonify(response)
+
+        devicedatalist={}
+        for deviceid in deviceidlist:
+            dbkey="device:"+deviceid
+            dbval=self.db.get(dbkey)
+            if(dbval!=None):
+                devicedatalist[deviceid]=literal_eval(dbval)
+        
+        response={}
+        response['devicedatalist']=devicedatalist
+        response['result']=True
+        return jsonify(response)
+
