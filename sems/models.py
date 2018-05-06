@@ -459,7 +459,7 @@ class Session():
 		sql="insert into sessions(device_id,start_time) values('"+self.deviceid+"',now())"
 		r=dao.updateData(sql)
 		if(r==True):
-			sql="select id from sessions where device_id='"+self.deviceid+"' and end_time is NULL"
+			sql="select max(id) from sessions where device_id='"+self.deviceid+"' and end_time is NULL"
 			rows=dao.getData(sql)
 			if(rows==None):
 				return "Database Error"

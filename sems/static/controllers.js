@@ -101,32 +101,58 @@ angular.module('myApp').controller('realtimeDataController',
 
     $scope.logindata=AuthService.getLoginData();
 
+    $scope.device=null;
+    $scope.deviceFound=false;
+
+    var url='/api/device/'+$routeParams.device_id;
+    $http.get(url).then( function(response) {
+      if(response.data.result)
+      {
+        $scope.device=response.data;
+        $scope.deviceFound=true;
+        console.log(response.data);
+      }
+      else{
+        $scope.device=null;
+        $scope.deviceFound=false;
+      }
+    
+    });
+    
     $scope.getrealtimedata=function(){
     
       var url='/api/device/'+$routeParams.device_id+'/realtimedata';
       $http.get(url).then( function(response) {
         if(response.data.result)
         {
-          $scope.device=response.data;
-          $scope.deviceON=true;
+          $scope.dsession=response.data;
+          //$scope.deviceON=true;
         
         }
         else{
-          $scope.device=null;
-          $scope.deviceON=false;
+          $scope.dsession=null;
+          //$scope.deviceON=false;
         }
     
       });
 
       console.log("Interval Occurred.");
-      console.log($scope.device);
+      console.log($scope.dsession);
 
     };
 
     $scope.datafetch_timer=$interval(function(){$scope.getrealtimedata(); }, 2000);
-
     $scope.$on('$destroy',function(){$interval.cancel($scope.datafetch_timer);  });
-    
+
+    /*
+    if($scope.deviceFound){
+      if($scope.device.state==true){
+        
+        console.log("testing..");
+      }
+    }
+    */
+
 }]);
 
 angular.module('myApp').controller('deviceInfoController',

@@ -115,7 +115,7 @@ class DeviceStateByIdAPI(Resource):
         else:
             response={}
             response['msg']=d
-            response['result']=True
+            response['result']=False
             return jsonify(response)
         
     def post(self,device_id):

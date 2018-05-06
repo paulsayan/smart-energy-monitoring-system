@@ -41,7 +41,8 @@
 
                       <br>
 
-                        <div ng-if="deviceON">
+                      <div ng-if="deviceFound">
+                        <div class="row" ng-if="device.state">
                             <div class="box-color p-a primary">
                               <div class="pull-right m-l">
                                 <span class="w-40 dker text-center rounded">
@@ -49,18 +50,22 @@
                                 </span>
                               </div>
                               <div class="clear">
-                                <h4 class="m-a-0 text-md"><p ng-bind="device.instpower"></p> 
-                                <span class="text-sm">Watt(s)</span></h4>
+                                  <h4 class="m-a-0 text-md">Instantaneous Power Consumption</h4>
+                                <h4 class="m-a-0 text-md"><p ng-bind="dsession.instpower+' Watts'"></p> 
+                                <span class="text-sm"></span></h4>
                                 
-                                <small class="text-muted">Current Session : {{device.currentsession}}</small>
+                                <small class="text-muted">Current Session : {{dsession.sid}}</small>
                               </div>
                             </div>
                         </div>
-                    
+                      
+
                         <br>
 
-                        <p ng-if="!deviceON">Device is in OFF state now.</p>
+                        <p ng-if="!device.state">Device is in OFF state now.</p>
+                      </div>
 
+                      <p ng-if="!deviceFound">Device Not Found!!!</p>
         
                 </div>
            
