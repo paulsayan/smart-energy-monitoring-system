@@ -494,3 +494,39 @@ class Session():
 		r=dao.updateData(sql)
 		print(r)
 		return r
+
+
+	@classmethod
+	def getEnergyConsumedPerDeviceByOwner(cls,owner,startdate,enddate):
+		def rowtoDict(row):
+			r={}
+			r['id']=row[0]
+			r['name']=row[1]
+			r['energyc']=row[2]
+			return r
+
+		dao=DAOClass()
+		sql="select device_id,name,sum(energy_consumed) \
+		 from sessions,devices \
+		 where sessions.device_id=devices.id \
+		 and start_time between '"+startdate+"' and '"+enddate+"' \
+		 group by device_id \
+		 having device_id in (select id from devices where owner="+str(owner)+")"
+		
+		print(sql)
+		rows=dao.getData(sql)
+		print(rows)
+		if(rows==None):
+			msg="Database Error"
+			print(msg)
+			return msg
+		elif (rows==[]):
+			msg="No Sessions of any Device Found!!!"
+			print(msg)
+			return msg
+		else:
+			r=[rowtoDict(row) for row in rows]
+			print(r)
+			return r
+
+		

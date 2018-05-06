@@ -39,18 +39,63 @@
                 </ul>
               </div>
 
-            
-<!-- 
-          <form name="form">
-            <button type="button" class="btn primary btn-block p-x-md" ng-disabled="disabled">Devices</button>
-            
-            <br>
+              <br>
 
-            <div ng-controller="logoutController">
-                <button type="button" class="btn primary btn-block p-x-md" ng-click='logout()'>Logout</button>
-            </div>
-          </form>
--->
+              
+              <div class="row">
+                  <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="startdate">Start Date</label>    
+                  <input type='date' id="startdate" class="form-control" ng-model="startdate" placeholder="Start Date" ng-required="required"/>
+                </div>   
+                </div>
+                <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="enddate">End Date</label>    
+                  <input type='date' id="enddate" class="form-control" ng-model="enddate" placeholder="End Date" ng-required="required"/>
+                </div>
+              </div>
+              <center>
+                  <button class="btn btn-fw primary" ng-click="viewAnyBill()">View Bill</button>
+                </center>
+              </div>
+              
+              <br>
+
+              <div class="box" ng-if="dataFound" style="background-color: white">
+
+                  <div class="table-responsive">
+                  <table class="table table-striped b-t">
+                    <thead>
+                      <tr>
+                        
+                        <th>Device Name</th>
+                        <th>Energy Consumed (Wh)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                      <tr ng-repeat="device in devicelist">
+                        
+                        <td ng-bind="device.name"></td>
+                        <td ng-bind="device.energyc"></td>
+                                                
+                      </tr>
+                      <tr>
+                        <td>Total Energy Consumption :</td>
+                        <td ng-bind="totalenergyc"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+                
+                </div>
+
+                <div ng-if="!dataFound">
+                    <p ng-bind="errorMessage"></p><br>
+                </div>
+
 
         </div>
    

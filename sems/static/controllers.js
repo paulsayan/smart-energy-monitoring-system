@@ -47,10 +47,36 @@ angular.module('myApp').controller('logoutController',
 }]);
 
 angular.module('myApp').controller('homeController',
-  ['$scope', '$location', 'AuthService',
-  function ($scope, $location, AuthService) {
+  ['$scope', '$location', 'AuthService','$http',
+  function ($scope, $location, AuthService, $http) {
 
     $scope.logindata=AuthService.getLoginData();
+
+    $scope.viewAnyBill=function()
+    {
+        var startdate=$scope.startdate.getFullYear()+"-"+($scope.startdate.getMonth()+1)+"-"+$scope.startdate.getDate();
+        var enddate=$scope.enddate.getFullYear()+"-"+($scope.enddate.getMonth()+1)+"-"+$scope.enddate.getDate();
+
+        //alert(startdate+" to "+enddate);
+
+        var url='/api/anybill/'+$scope.logindata.id+'?startdate='+startdate+'&enddate='+enddate;
+        $http.get(url).then( function(response) {
+        if(response.data.result)
+        {
+          $scope.devicelist=response.data.devicelist;
+          $scope.totalenergyc=response.data.totalenergyc;
+          $scope.dataFound=true;
+          console.log(response.data);
+        }
+        else{
+          $scope.devicelist=null;
+          $scope.dataFound=false;
+          $scope.errorMessage=response.data.msg;
+        }
+    
+        });
+
+    };
 
 }]);
 
