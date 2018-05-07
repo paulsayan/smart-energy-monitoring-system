@@ -27,6 +27,10 @@
                   </li>
 
                   <li class="nav-item">
+                  <a class="nav-link"  href="#/bills">Bills</a>
+                  </li>
+
+                  <li class="nav-item">
                   <a class="nav-link"  href="#/profile">{{logindata.name}}'s Profile</a>
                   </li>
                   
@@ -40,37 +44,23 @@
               </div>
 
               <br>
-
-              
-              <div class="row">
-                  <div class="col-sm-6">
-                <div class="form-group">
-                  <label for="startdate">Start Date</label>    
-                  <input type='date' id="startdate" class="form-control" ng-model="startdate" placeholder="Start Date" ng-required="required"/>
-                </div>   
-                </div>
-                <div class="col-sm-6">
-                <div class="form-group">
-                  <label for="enddate">End Date</label>    
-                  <input type='date' id="enddate" class="form-control" ng-model="enddate" placeholder="End Date" ng-required="required"/>
-                </div>
-              </div>
               <center>
-                  <button class="btn btn-fw primary" ng-click="viewAnyBill()">View Bill</button>
-                </center>
-              </div>
-              
+                <button class="btn btn-fw primary" ng-click="viewRealtimeBill()">View Realtime Bill</button>
+              </center>
               <br>
 
-              <div class="box" ng-if="dataFound" style="background-color: white">
+              <div class="box" ng-show="dataFound" style="background-color: white">
 
                   <div class="table-responsive">
-                  <table class="table table-striped b-t">
+                  <table class="table table-striped b-t" style="text-align: center">
                     <thead>
                       <tr>
-                        
-                        <th>Device Name</th>
-                        <th>Energy Consumed (Wh)</th>
+                          <th rowspan="2" style="text-align: center">Device Name</th>
+                          <th colspan="2" style="text-align: center">Energy Consumption</th>
+                      </tr>
+                      <tr>
+                        <th style="text-align: center">Previous Sessions</th>
+                        <th style="text-align: center">Current Session</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -79,12 +69,21 @@
                         
                         <td ng-bind="device.name"></td>
                         <td ng-bind="device.energyc"></td>
+                        <td ng-bind="device.rtenergyc"></td>
                                                 
                       </tr>
+                      
                       <tr>
-                        <td>Total Energy Consumption :</td>
-                        <td ng-bind="totalenergyc"></td>
+                        <td>SubTotal(s) :</td>
+                        <td ng-bind="totalenergyc_cs"></td>
+                        <td ng-bind="totalenergyc_os"></td>
                       </tr>
+
+                      <tr>
+                        <td>Total :</td>
+                        <td ng-bind="totalenergyc" colspan="2" style="text-align: center"></td>
+                      </tr>
+
                     </tbody>
                   </table>
 
@@ -92,8 +91,8 @@
                 
                 </div>
 
-                <div ng-if="!dataFound">
-                    <p ng-bind="errorMessage"></p><br>
+                <div ng-show="!dataFound">
+                    <p ng-bind="errormsg"></p><br>
                 </div>
 
 

@@ -52,6 +52,42 @@ angular.module('myApp').controller('homeController',
 
     $scope.logindata=AuthService.getLoginData();
 
+    $scope.viewRealtimeBill=function()
+    {
+      
+        var url='/api/realtimebill/'+$scope.logindata.id;
+
+        $http.get(url).then( function(response) {
+        if(response.data.result)
+        {
+          $scope.devicelist=response.data.devicelist;
+          $scope.totalenergyc=response.data.totalenergyc;
+          $scope.totalenergyc_cs=response.data.totalenergyc_completedsessions;
+          $scope.totalenergyc_os=response.data.totalenergyc_ongoingsessions;
+
+          $scope.dataFound=true;
+          console.log(response.data);
+        }
+        else{
+          $scope.devicelist=null;
+          $scope.dataFound=false;
+          $scope.errormsg=response.data.msg;
+        }
+    
+        });
+
+    };
+
+    //$scope.viewRealtimeBill();
+
+}]);
+
+angular.module('myApp').controller('billsController',
+  ['$scope', '$location', 'AuthService','$http',
+  function ($scope, $location, AuthService, $http) {
+
+    $scope.logindata=AuthService.getLoginData();
+
     $scope.viewAnyBill=function()
     {
         var startdate=$scope.startdate.getFullYear()+"-"+($scope.startdate.getMonth()+1)+"-"+$scope.startdate.getDate();
@@ -79,6 +115,7 @@ angular.module('myApp').controller('homeController',
     };
 
 }]);
+
 
 angular.module('myApp').controller('profileController',
   ['$scope', '$location', 'AuthService',
@@ -273,6 +310,12 @@ angular.module('myApp').controller('devicesController',
       
     };
 
+    $scope.selectdevice=function(device_id)
+    {
+      $scope.deviceselected=device_id;
+    };
+
+
     /*
     $scope.gotoDeviceSettings=function(device_id){
       
@@ -305,10 +348,13 @@ angular.module('myApp').controller('devicesController',
 }]);
 
 angular.module('myApp').controller('sessionsController',
-  ['$scope', '$location', 'AuthService', '$http','$routeParams',
-  function ($scope, $location, AuthService, $http, $routeParams) {
+  ['$scope', '$location', 'AuthService', '$http','$routeParams','$route',
+  function ($scope, $location, AuthService, $http, $routeParams, $route) {
 
     $scope.logindata=AuthService.getLoginData();
+
+    $scope.deletedallsessions=0;
+    $scope.deletedsession=0;
 
     var url='/api/sessions/'+$routeParams.device_id;
     $http.get(url).then( function(response) {
@@ -328,6 +374,53 @@ angular.module('myApp').controller('sessionsController',
 
     console.log($scope.sessionlist);
     console.log($scope.sessionlistfound);
+
+    $scope.deleteAllSessions=function()
+    {
+      
+      var url='/api/sessions/'+$routeParams.device_id;
+      $http.delete(url).then( function(response) {
+        if(response.data.result)
+        {
+          $scope.deletedallsessions=1;
+          $route.reload();
+        }
+        else{
+          $scope.deletedallsessions=2;
+          $scope.errormsg=response.data.msg;
+
+        }
+        
+        
+      });
+    }
+
+    $scope.deleteSessionById=function(session_id)
+    {
+      
+      var url='/api/session/'+session_id;
+      $http.delete(url).then( function(response) {
+        if(response.data.result)
+        {
+          $scope.deletedsession=1;
+          $route.reload();
+        }
+        else{
+          $scope.deletedsession=2;
+          $scope.errormsg=response.data.msg;
+
+        }
+        
+        
+      });
+
+
+    }
+
+    $scope.selectsession=function(session_id)
+    {
+      $scope.sessionselected=session_id;
+    };
 
   }]);
 

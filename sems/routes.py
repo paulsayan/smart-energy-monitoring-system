@@ -7,7 +7,7 @@ from userapi import UserLoginAPI,UserLogoutAPI,UserRegistrationAPI,UserStatusAPI
 from deviceapi import DeviceByIdAPI,DevicesByOwnerAPI,DeviceStateByIdAPI
 from realtimeapi import DeviceRealTimeAPI,DevicesRealTimeAPI
 from sessionapi import SessionByIdAPI,SessionsByDeviceAPI
-from billsapi import AnyBillAPI
+from billsapi import AnyBillAPI,RealtimeBillAPI
 
 api=Api(app)
 
@@ -34,7 +34,9 @@ api.add_resource(DevicesRealTimeAPI,'/api/devices/<int:owner_id>/realtimedata',e
 api.add_resource(SessionsByDeviceAPI,'/api/sessions/<device_id>',endpoint='sessionsbydevice')
 api.add_resource(SessionByIdAPI,'/api/session/<session_id>',endpoint='sessionbyid')
 
-api.add_resource(AnyBillAPI,'/api/anybill/<int:owner_id>',endpoint='anybill')
+api.add_resource(AnyBillAPI,'/api/anybill/<int:user_id>',endpoint='anybill')
+
+api.add_resource(RealtimeBillAPI,'/api/realtimebill/<int:user_id>',endpoint='realtimebill')
 
 
 """

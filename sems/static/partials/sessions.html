@@ -68,21 +68,89 @@
                           <td ng-bind="session.end_time"></td>
                           <td ng-bind="session.energy_consumed"></td>
                           
+                          <!--<td ng-click="deleteSessionById(session.id)">-->
+                          <td ng-click="selectsession(session.id)">
+                          <i class="material-icons md-24" data-toggle="modal" data-target="#m-sm">&#xe872;</i>
+                          </td>
+
                         </tr>
                        
                       </tbody>
                     </table>
                   </div>
-                  
+          
                   </div>
-
+                  
+                  <div ng-if="sessionlistfound">
+                  <center>
+                    <button class="btn btn-fw danger" data-toggle="modal" data-target="#m-sm2">Delete All Sessions</button>
+                  </center>
+                  </div>
 
                   <br>
                   <div ng-if="!sessionlistfound">
                     <p ng-bind="errorMessage"></p><br>
                   </div>
 
+                  <div ng-show="deletedallsessions==2 || deletedsession==2">
+                    <div class="row text-center">
+                        
+                                <div class="box-color danger pos-rlt">
+                                  <span class="arrow top b-danger"></span>
+                                  <div class="box-body">
+                                    <p ng-bind="errormsg"></p>
+                                  </div>
+                                </div>
+                        
+                    </div>
+                  </div>
 
+                  
+                  <!--modal start-->
+                  <div id="m-sm" class="modal" data-backdrop="true">
+                    <div class="row-col h-v">
+                      <div class="row-cell v-m">
+                        <div class="modal-dialog modal-sm">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Delete Session</h5>
+                            </div>
+                            <div class="modal-body text-center p-lg">
+                              <p>Are you sure want to delete this session?</p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn dark-white p-x-md" data-dismiss="modal">No</button>
+                              <button type="button" class="btn danger p-x-md" data-dismiss="modal" ng-click="deleteSessionById(sessionselected)">Yes</button>
+                            </div>
+                          </div><!-- /.modal-content -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--modal end-->
+
+                  <!--modal start-->
+                  <div id="m-sm2" class="modal" data-backdrop="true">
+                      <div class="row-col h-v">
+                        <div class="row-cell v-m">
+                          <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Delete All Sessions</h5>
+                              </div>
+                              <div class="modal-body text-center p-lg">
+                                <p>Are you sure want to delete all sessions?</p>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn dark-white p-x-md" data-dismiss="modal">No</button>
+                                <button type="button" class="btn danger p-x-md" data-dismiss="modal" ng-click="deleteAllSessions()">Yes</button>
+                              </div>
+                            </div><!-- /.modal-content -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--modal end-->
                     
             </div>
        

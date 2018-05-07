@@ -123,6 +123,9 @@ class Device():
 	@classmethod
 	def deleteDeviceById(cls,id1):
 		dao=DAOClass()
+		sql="delete from sessions where device_id='"+id1+"'"
+		print(sql)
+		r=dao.updateData(sql)
 		sql="delete from devices where id='"+id1+"'"
 		print(sql)
 		r=dao.updateData(sql)
@@ -497,7 +500,7 @@ class Session():
 
 
 	@classmethod
-	def getEnergyConsumedPerDeviceByOwner(cls,owner,startdate,enddate):
+	def getEnergyConsumedPerDeviceByOwner(cls,owner,startdate=None,enddate=None,lastbilldate=None):
 		def rowtoDict(row):
 			r={}
 			r['id']=row[0]
@@ -506,12 +509,28 @@ class Session():
 			return r
 
 		dao=DAOClass()
-		sql="select device_id,name,sum(energy_consumed) \
-		 from sessions,devices \
-		 where sessions.device_id=devices.id \
-		 and start_time between '"+startdate+"' and '"+enddate+"' \
-		 group by device_id \
-		 having device_id in (select id from devices where owner="+str(owner)+")"
+		if(lastbilldate!=None):
+			sql="select device_id,name,sum(energy_consumed) as esum \
+			from sessions,devices \
+			where sessions.device_id=devices.id \
+			and start_time between '"+lastbilldate+"'+INTERVAL 1 DAY and now() \
+			group by device_id \
+			having device_id in (select id from devices where owner="+str(owner)+") \
+			and esum is not null"
+			
+		elif(startdate!=None and enddate!=None and lastbilldate==None):
+			sql="select device_id,name,sum(energy_consumed) as esum \
+			from sessions,devices \
+			where sessions.device_id=devices.id \
+			and start_time between '"+startdate+"' and '"+enddate+"' \
+			group by device_id \
+			having device_id in (select id from devices where owner="+str(owner)+") \
+			and esum is not null"
+			
+		else:
+			msg="Query Error"
+			print(msg)
+			return msg
 		
 		print(sql)
 		rows=dao.getData(sql)
@@ -530,3 +549,65 @@ class Session():
 			return r
 
 		
+
+class UserSetting():
+	def __init__(self,user_id,setting,value):
+		self.user_id=user_id
+		self.setting=setting
+		self.value=value
+
+	def setvalue(self,value):
+		self.value=value
+
+	def addSetting(self):
+		dao=DAOClass()
+		sql="insert into usersettings values("+str(self.user_id)+",'"+self.setting+"','"+self.value+"')"
+		print(sql)
+		r=dao.updateData(sql)
+		return r
+
+	def toDict(self):
+		d={}
+		d['user_id']=self.user_id
+		d['setting']=self.setting
+		d['value']=self.value
+		return d
+
+	@classmethod
+	def rowtoObj(cls,row):
+		us=UserSetting(row[0],row[1],row[2])
+		return us
+
+	@classmethod
+	def getSetting(cls,user_id,setting):
+		dao=DAOClass()
+		sql="select * from usersettings where user_id="+str(user_id)+" and setting='"+setting+"'"
+		print(sql)
+		rows=dao.getData(sql)
+		if(rows==None or rows==[]):
+			return False
+		else:
+			return cls.rowtoObj(rows[0])
+
+	
+	@classmethod
+	def getAllSettings(cls,user_id):
+		dao=DAOClass()
+		sql="select * from usersettings where user_id="+str(user_id)
+		print(sql)
+		rows=dao.getData(sql)
+		if(rows==None or rows==[]):
+			return False
+		else:
+			return [cls.rowtoObj(row) for row in rows]
+
+
+	def updateSetting(self):
+		dao=DAOClass()
+		sql="update usersettings set svalue='"+self.value+"' where user_id="+str(self.user_id)+" and setting='"+self.setting+"'"
+		print(sql)
+		r=dao.updateData(sql)
+		return r
+
+	
+

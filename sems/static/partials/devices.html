@@ -85,9 +85,8 @@
                             </a>
                           </td>
 
-                          <td>
-
-                            <i class="material-icons md-24" ng-click="deleteDevice(device.id)">&#xe872;</i>
+                          <td ng-click="selectdevice(device.id)">
+                            <i class="material-icons md-24" data-toggle="modal" data-target="#m-sm">&#xe872;</i>
                           </td>
                           
                         </tr>
@@ -111,6 +110,33 @@
                 </div>
 
                 
+
+                <!--modal start-->
+                <div id="m-sm" class="modal" data-backdrop="true">
+                    <div class="row-col h-v">
+                      <div class="row-cell v-m">
+                        <div class="modal-dialog modal-sm">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Delete Device</h5>
+                            </div>
+                            <div class="modal-body text-center p-lg">
+                              <p>Are you sure want to delete this device?</p>
+                              <p><i>Note: If you proceed to do so, 
+                                then all the data associated with the device will also be deleted</i></p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn dark-white p-x-md" data-dismiss="modal">No</button>
+                              <button type="button" class="btn danger p-x-md" data-dismiss="modal" ng-click="deleteDevice(deviceselected)">Yes</button>
+                            </div>
+                          </div><!-- /.modal-content -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--modal end-->
+
+
     
     
             </div>

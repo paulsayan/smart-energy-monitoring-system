@@ -59,6 +59,11 @@ myApp.config(function ($routeProvider) {
       controller: 'realtimeDataController',
       access: {restricted: true}
     })
+    .when('/bills', {
+      templateUrl: 'static/partials/bills.html',
+      controller: 'billsController',
+      access: {restricted: true}
+    })
     .otherwise({
       redirectTo: '/'
     });
