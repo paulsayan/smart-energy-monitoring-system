@@ -1,4 +1,4 @@
-from models import Session,UserSetting,Device
+from models import Session,UserSetting,Device,Notification
 from flask_restful import Resource
 from flask import jsonify,session,request
 import redis
@@ -106,10 +106,65 @@ class RealtimeBillAPI(Resource):
         return d
 
 
+class UpdateBillsAPI(Resource):
+    def get(self):
+
+        if(request.args.get('user')!=None):
+            user_id=request.args.get('user')
+        elif(request.args.get('device')!=None):
+            deviceid=request.args.get('device')
+            device=Device.getDeviceById(deviceid)
+            user_id=device.getowner()
+        else:
+            return jsonify({'result':False})
+
+        #realtimebill=RealtimeBillAPI().getBill(user_id)
+        #lastbilldate=UserSetting.getSetting(user_id,'lastbilldate')
+
+        lastbilldate_updated=UserSetting.updateLastBillDate(user_id)
+        if(lastbilldate_updated==True):
+            #session energyc split
+            #realtime bill -> stored bill
+            pass
+
+        realtimebill=RealtimeBillAPI().getBill(user_id)
+        energyc_now=realtimebill['totalenergyc']
+        energyc_quota=float(UserSetting.getSetting(user_id,'energyc_quota').toDict()['value'])
+
+        billingcycle=UserSetting.getSetting(user_id,'billingcycle').toDict()['value']
+        billstartdate,billenddate=UserSetting.getBillingPeriodDates(user_id,billingcycle)
+
+        notification_generated=False
+        if(energyc_now>energyc_quota):
+            alreadynotified=False
+            billingcycle=UserSetting.getSetting(user_id,'billingcycle').toDict()['value']
+            billstartdate,billenddate=UserSetting.getBillingPeriodDates(user_id,billingcycle)
+            user_notifications=Notification.getNotificationsByUserIdAndDates(user_id,billstartdate,billenddate)
+            if(isinstance(user_notifications,list)):
+                user_notifications_d=[n.toDict() for n in user_notifications]
+                for n in user_notifications_d:
+                    if(n['type']=='ENERGYC_QUOTA_EXCEEDED'):
+                        alreadynotified=True
             
+            if(alreadynotified==False):
+                new_notification=Notification()
+                new_notification.setuserid(user_id)
+                new_notification.settype('ENERGYC_QUOTA_EXCEEDED')
+                n_msg="Your devices have exceeded the energy consumption quota for the billing period \
+                "+billstartdate+" to "+billenddate+"."
+                new_notification.setmsg(n_msg)
+                notification_generated=new_notification.addNotification()
 
 
-        
+        response={}
+        response['lastbilldate_updated']=lastbilldate_updated
+        response['notification_generated']=notification_generated
+        response['billstartdate']=billstartdate
+        response['billenddate']=billenddate
+        response['energyc_quota']=energyc_quota
+        response['result']=True
+        return jsonify(response)
+
 
         
 

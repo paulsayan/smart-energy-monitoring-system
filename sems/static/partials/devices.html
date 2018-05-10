@@ -19,7 +19,9 @@
                     <ul class="nav nav-pills" ui-nav>
                       
                       <li class="nav-item">
-                      <a class="nav-link" href="#/">Home</a>
+                          <a class="nav-link" href="#/">
+                            <i class="material-icons md-24">&#xe88a;</i>
+                          </a>
                       </li>
                       
                       <li class="nav-item  active">
@@ -27,13 +29,35 @@
                       </li>
     
                       <li class="nav-item">
-                      <a class="nav-link"  href="#/profile">{{logindata.name}}'s Profile</a>
-                      </li>
+                        <a class="nav-link"  href="#/bills">Bills</a>
+                        </li>
+      
+                        <li class="nav-item">
+                          <a class="nav-link"  href="#/profile">
+                            <i class="material-icons md-24">&#xe7fd;</i>
+                          </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                          <a class="nav-link"  href="#/settings">
+                            <i class="material-icons md-24">&#xe8b8;</i>
+                          </a>
+                        </li>
                       
                       
-                      <li class="nav-item" ng-controller="logoutController">
-                      <a class="nav-link" ng-click='logout()' >Logout</a>
-                      </li>
+                        <li class="nav-item" ng-controller="notificationsController">
+                            <a class="nav-link"  href="#/notifications">
+                              <i class="material-icons md-24">&#xe7f4;</i>
+                              <b class="label rounded danger up" ng-bind="notifications.length"></b>
+                            </a>
+                        </li>
+                        
+                        
+                        <li class="nav-item" ng-controller="logoutController">
+                        <a class="nav-link" ng-click='logout()' >
+                          <i class="material-icons md-24">&#xe8ac;</i>
+                        </a>
+                        </li>
                       
     
                     </ul>
@@ -42,7 +66,7 @@
                   <br>
 
                   
-                  <div class="box" ng-if="devicelistfound" style="background-color: white">
+                  <div class="box" ng-if="devicelistfound" style="background-color: whitesmoke">
                     <!--
                     <div class="box-header">
                       <span class="label danger pull-right">{{devicelist.length}}</span>
@@ -101,6 +125,7 @@
                     <p ng-bind="errorMessage"></p><br>
                   </div>
 
+                <center>
                 <div class="clearfix m-b nav-active-dark">
                     <ul class="nav nav-pills" ui-nav>
                         <li class="nav-item active">
@@ -108,8 +133,8 @@
                         </li>
                     </ul>
                 </div>
+              </center>
 
-                
 
                 <!--modal start-->
                 <div id="m-sm" class="modal" data-backdrop="true">

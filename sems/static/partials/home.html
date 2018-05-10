@@ -19,7 +19,9 @@
                 <ul class="nav nav-pills" ui-nav>
                   
                   <li class="nav-item active">
-                  <a class="nav-link" href="#/">Home</a>
+                  <a class="nav-link" href="#/">
+                    <i class="material-icons md-24">&#xe88a;</i>
+                  </a>
                   </li>
                   
                   <li class="nav-item">
@@ -31,32 +33,99 @@
                   </li>
 
                   <li class="nav-item">
-                  <a class="nav-link"  href="#/profile">{{logindata.name}}'s Profile</a>
+                    <a class="nav-link"  href="#/profile">
+                      <i class="material-icons md-24">&#xe7fd;</i>
+                    </a>
+                  </li>
+                  
+                  <li class="nav-item">
+                    <a class="nav-link"  href="#/settings">
+                      <i class="material-icons md-24">&#xe8b8;</i>
+                    </a>
+                  </li>
+
+                  <li class="nav-item" ng-controller="notificationsController">
+                      <a class="nav-link"  href="#/notifications">
+                        <i class="material-icons md-24">&#xe7f4;</i>
+                        <b class="label rounded danger up" ng-bind="notifications.length"></b>
+                      </a>
                   </li>
                   
                   
                   <li class="nav-item" ng-controller="logoutController">
-                  <a class="nav-link" ng-click='logout()' >Logout</a>
+                  <a class="nav-link" ng-click='logout()' >
+                    <i class="material-icons md-24">&#xe8ac;</i>
+                  </a>
                   </li>
                   
 
                 </ul>
               </div>
 
-              <br>
+              
+              <!--
               <center>
                 <button class="btn btn-fw primary" ng-click="viewRealtimeBill()">View Realtime Bill</button>
               </center>
-              <br>
+              -->
+              
 
-              <div class="box" ng-show="dataFound" style="background-color: white">
+              <div ng-show="dataFound"> 
+
+                <div class="row">
+                  <div class="box-color p-a info">
+                    
+                    <div class="clear">
+                        <h4 class="m-a-0 text-md" >Billing Period :</h4>
+                        <h4 class="m-a-0 text-md" ng-bind="billstartdate+' to '+billenddate"></h4>
+                      <span class="text-sm"></span>
+                      
+                      <small class="text-muted"></small>
+                    </div>
+                  </div>
+              </div>
+
+                <div class="row">
+                  <div class="box-color p-a primary">
+                    <div class="pull-right m-l">
+                      <span class="w-40 dker text-center rounded">
+                        <i class="material-icons">&#xe1af;</i>
+                      </span>
+                    </div>
+                    <div class="clear">
+                        <h4 class="m-a-0 text-md">Total Energy Consumption (till now)</h4>
+                      <h4 class="m-a-0 text-md"><p ng-bind="(totalenergyc/1000)+' Units or kWh'"></p> 
+                      
+                        <!--
+                      <div ng-show="energyc_quota_exceeded>-1">
+
+                      <h4><span class="text-md" ng-show="energyc_quota_exceeded==1">
+                        Quota Exceeded By {{(totalenergyc-energyc_quota)/1000}} Units or kWh
+                      </span></h4>
+
+                      <h4><span class="text-md" ng-show="energyc_quota_exceeded==0">
+                          {{(totalenergyc/energyc_quota)*100}} % of Quota
+                      </span></h4>
+
+                      </div>
+                      -->
+                      
+                      <small class="text-muted"></small>
+                    </div>
+                  </div>
+              </div>
+
+
+              </div>
+
+              <div class="box" ng-show="dataFound" style="background-color: whitesmoke">
 
                   <div class="table-responsive">
                   <table class="table table-striped b-t" style="text-align: center">
                     <thead>
                       <tr>
                           <th rowspan="2" style="text-align: center">Device Name</th>
-                          <th colspan="2" style="text-align: center">Energy Consumption</th>
+                          <th colspan="2" style="text-align: center">Energy Consumption (in Wh)</th>
                       </tr>
                       <tr>
                         <th style="text-align: center">Previous Sessions</th>
@@ -74,13 +143,13 @@
                       </tr>
                       
                       <tr>
-                        <td>SubTotal(s) :</td>
+                        <td>SubTotal(s) (in Wh):</td>
                         <td ng-bind="totalenergyc_cs"></td>
                         <td ng-bind="totalenergyc_os"></td>
                       </tr>
 
                       <tr>
-                        <td>Total :</td>
+                        <td>Total (in Wh) :</td>
                         <td ng-bind="totalenergyc" colspan="2" style="text-align: center"></td>
                       </tr>
 

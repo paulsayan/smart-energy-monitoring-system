@@ -19,7 +19,9 @@
                         <ul class="nav nav-pills" ui-nav>
                           
                           <li class="nav-item">
-                          <a class="nav-link" href="#/">Home</a>
+                              <a class="nav-link" href="#/">
+                                <i class="material-icons md-24">&#xe88a;</i>
+                              </a>
                           </li>
                           
                           <li class="nav-item">
@@ -27,19 +29,54 @@
                           </li>
         
                           <li class="nav-item">
-                          <a class="nav-link"  href="#/profile">{{logindata.name}}'s Profile</a>
-                          </li>
+                            <a class="nav-link"  href="#/bills">Bills</a>
+                            </li>
+          
+                            <li class="nav-item">
+                              <a class="nav-link"  href="#/profile">
+                                <i class="material-icons md-24">&#xe7fd;</i>
+                              </a>
+                            </li>
+                            
+                            <li class="nav-item">
+                              <a class="nav-link"  href="#/settings">
+                                <i class="material-icons md-24">&#xe8b8;</i>
+                              </a>
+                            </li>
                           
                           
-                          <li class="nav-item" ng-controller="logoutController">
-                          <a class="nav-link" ng-click='logout()' >Logout</a>
-                          </li>
+                            <li class="nav-item" ng-controller="notificationsController">
+                                <a class="nav-link"  href="#/notifications">
+                                  <i class="material-icons md-24">&#xe7f4;</i>
+                                  <b class="label rounded danger up" ng-bind="notifications.length"></b>
+                                </a>
+                            </li>
+                            
+                            
+                            <li class="nav-item" ng-controller="logoutController">
+                            <a class="nav-link" ng-click='logout()' >
+                              <i class="material-icons md-24">&#xe8ac;</i>
+                            </a>
+                            </li>
                           
         
                         </ul>
                       </div>
 
                       <br>
+
+                      <div class="row" ng-if="device.state">
+                        <div class="box-color p-a info">
+                          
+                          <div class="clear">
+                              <h4 class="m-a-0 text-md" ng-bind="'Current Session: '+dsession.sid"></h4>
+                              <h4 class="m-a-0 text-md" ng-bind="'Start Time: '+dsession_starttime"></h4>
+                            <span class="text-sm"></span>
+                            
+                            <small class="text-muted"></small>
+                          </div>
+                        </div>
+                    </div>
 
                       <div ng-if="deviceFound">
                         <div class="row" ng-if="device.state">
@@ -54,10 +91,27 @@
                                 <h4 class="m-a-0 text-md"><p ng-bind="dsession.instpower+' Watts'"></p> 
                                 <span class="text-sm"></span></h4>
                                 
-                                <small class="text-muted">Current Session : {{dsession.sid}}</small>
+                                <small class="text-muted"></small>
                               </div>
                             </div>
                         </div>
+                        
+                        <div class="row" ng-if="device.state">
+                          <div class="box-color p-a accent">
+                            <div class="pull-right m-l">
+                              <span class="w-40 dker text-center rounded">
+                                <i class="material-icons">&#xe1af;</i>
+                              </span>
+                            </div>
+                            <div class="clear">
+                                <h4 class="m-a-0 text-md">Energy Consumption (till now)</h4>
+                              <h4 class="m-a-0 text-md"><p ng-bind="dsession.energyc+' Watt-Hours'"></p> 
+                              <span class="text-sm"></span></h4>
+                              
+                              <small class="text-muted"></small>
+                            </div>
+                          </div>
+                      </div>
                       
 
                         <br>

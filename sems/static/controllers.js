@@ -47,14 +47,31 @@ angular.module('myApp').controller('logoutController',
 }]);
 
 angular.module('myApp').controller('homeController',
-  ['$scope', '$location', 'AuthService','$http',
-  function ($scope, $location, AuthService, $http) {
+  ['$scope', '$location', 'AuthService','$http', '$interval',
+  function ($scope, $location, AuthService, $http, $interval) {
 
     $scope.logindata=AuthService.getLoginData();
 
+    $scope.energyc_quota_exceeded=-1;
+
+    var url='/api/updatebills?user='+$scope.logindata.id;
+    $http.get(url).then( function(response) {
+      if(response.data.result)
+      {
+        $scope.billstartdate=response.data.billstartdate;
+        $scope.billenddate=response.data.billenddate;
+        $scope.energyc_quota=response.data.energyc_quota;
+        
+        console.log(response.data);
+      }
+      else{
+        
+      }
+
+    });
+
     $scope.viewRealtimeBill=function()
     {
-      
         var url='/api/realtimebill/'+$scope.logindata.id;
 
         $http.get(url).then( function(response) {
@@ -73,12 +90,30 @@ angular.module('myApp').controller('homeController',
           $scope.dataFound=false;
           $scope.errormsg=response.data.msg;
         }
+
+        if($scope.totalenergyc==0)
+        {
+          $scope.dataFound=false;
+          $scope.errormsg=$scope.devicelist;
+        }
     
         });
+
+        if($scope.totalenergyc>$scope.energyc_quota)
+        {
+          $scope.energyc_quota_exceeded=1;
+        }
+        else
+        {
+          $scope.energyc_quota_exceeded=0;
+        }
 
     };
 
     //$scope.viewRealtimeBill();
+
+    $scope.datafetch_timer=$interval(function(){$scope.viewRealtimeBill(); }, 2000);
+    $scope.$on('$destroy',function(){$interval.cancel($scope.datafetch_timer);  });
 
 }]);
 
@@ -126,6 +161,79 @@ angular.module('myApp').controller('profileController',
 
 }]);
 
+angular.module('myApp').controller('settingsController',
+  ['$scope', '$location', 'AuthService','$http',
+  function ($scope, $location, AuthService, $http) {
+
+    $scope.logindata=AuthService.getLoginData();
+    
+    var url='/api/user/'+$scope.logindata.id+"/settings";
+    $http.get(url).then( function(response) {
+      if(response.data.result)
+      {
+        $scope.settings=response.data.settings;
+        $scope.settingsFound=true;
+        console.log($scope.settings)
+      }
+      else{
+        $scope.settings=null;
+        $scope.settingsFound=false;
+      }
+    
+    });
+
+    $scope.SettingNametoLabel=function(settingname){
+      if(settingname=="billingcycle"){
+        return "Billing Cycle (in Days)"
+      }
+      else if(settingname=="lastbilldate"){
+        return "Last Bill Date (YYYY-MM-DD)"
+      }
+      else if(settingname=="energyc_quota"){
+        return "Energy Consumption Quota (in Wh)"
+      }
+      return null;
+    };
+
+
+
+}]);
+
+angular.module('myApp').controller('notificationsController',
+  ['$scope', '$location', 'AuthService', '$http',
+  function ($scope, $location, AuthService, $http) {
+
+    $scope.logindata=AuthService.getLoginData();
+    
+    var url='/api/notifications/'+$scope.logindata.id;
+    $http.get(url).then( function(response) {
+      if(response.data.result)
+      {
+        $scope.notifications=response.data.notifications;
+        $scope.notificationsFound=true;
+        console.log($scope.notifications)
+      }
+      else{
+        $scope.notifications=null;
+        $scope.notificationsFound=true;
+      }
+    
+    });
+
+    $scope.NotificationTypeToText=function(ntype)
+    {
+      if(ntype=="ENERGYC_QUOTA_EXCEEDED")
+      {
+        return "Energy Consumption Quota Exceeded!";
+      }
+      else
+      {
+        return "";
+      }
+    }
+
+}]);
+
 angular.module('myApp').controller('addDeviceController',
   ['$scope', '$location', 'AuthService', '$http',
   function ($scope, $location, AuthService, $http) {
@@ -167,6 +275,8 @@ angular.module('myApp').controller('realtimeDataController',
     $scope.device=null;
     $scope.deviceFound=false;
 
+    $scope.dsession_starttime_found=false;
+
     var url='/api/device/'+$routeParams.device_id;
     $http.get(url).then( function(response) {
       if(response.data.result)
@@ -198,6 +308,27 @@ angular.module('myApp').controller('realtimeDataController',
         }
     
       });
+
+      if($scope.dsession_starttime_found==false)
+      {
+        var url='/api/session/'+$scope.dsession.sid;
+        $http.get(url).then( function(response) {
+        if(response.data.result)
+        {
+          $scope.dsession_starttime=response.data.start_time;
+          $scope.dsession_starttime_found=true;
+          //$scope.deviceON=true;
+        
+        }
+        else{
+          $scope.dsession_starttime=null;
+          //$scope.deviceON=false;
+        }
+    
+        });
+
+
+      }
 
       console.log("Interval Occurred.");
       console.log($scope.dsession);

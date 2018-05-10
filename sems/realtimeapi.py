@@ -12,6 +12,9 @@ class DeviceRealTimeAPI(Resource):
         post_data=request.get_json()
         device={}
         device['instpower']=post_data.get('instpower')
+        device['energyc']=post_data.get('energyc')
+        device['sid']=post_data.get('sid')
+
         dbkey="device:"+device_id
         r=self.db.set(dbkey,device)
         if(r==True):

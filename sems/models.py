@@ -609,5 +609,135 @@ class UserSetting():
 		r=dao.updateData(sql)
 		return r
 
+	@classmethod
+	def updateLastBillDate(cls,user_id):
+		dao=DAOClass()
+		sql="select svalue from usersettings where user_id="+user_id+" and setting='billingcycle'"
+		print(sql)
+		billingcycle=dao.getData(sql)[0][0]
+		print(billingcycle)
+		if(billingcycle==None):
+			return False
+
+		sql="update usersettings set svalue=svalue+INTERVAL "+billingcycle+" DAY\
+		 where user_id="+user_id+" and setting='lastbilldate' \
+		 and now()>svalue+INTERVAL "+billingcycle+" DAY"
+		print(sql)
+		r=dao.updateData(sql)
+		return r
+
+	@classmethod
+	def getBillingPeriodDates(cls,user_id,billingcycle):
+		dao=DAOClass()
+		sql="select svalue+INTERVAL 1 DAY,svalue+INTERVAL "+str(billingcycle)+" DAY \
+		 from usersettings where user_id="+str(user_id)+" and setting='lastbilldate'"
+		print(sql)
+		rows=dao.getData(sql)
+		if(rows==None or rows==[]):
+			return False
+		else:
+			return rows[0][0],rows[0][1]
+
+
+
+class Notification():
+	def __init__(self):
+		self.id=None
+		self.user_id=None
+		self.time=None
+		self.type=None
+		self.msg=None
+		self.readn=False
+
+	def setuserid(self,user_id):
+		self.user_id=user_id
+
+	def settype(self,type1):
+		self.type=type1
+
+	def setmsg(self,msg):
+		self.msg=msg
 	
+
+	def toDict(self):
+		d={}
+		d['id']=self.id
+		d['user_id']=self.user_id
+		d['time']=self.time
+		d['type']=self.type
+		d['msg']=self.msg
+		d['readn']=self.readn
+		return d
+
+	@classmethod
+	def rowtoObj(cls,row):
+		n=Notification()
+		n.id=row[0]
+		n.user_id=int(row[1])
+		n.time=row[2]
+		n.type=row[3]
+		n.msg=row[4]
+		n.readn=bool(row[5])
+		return n
+
+	@classmethod
+	def getNotificationsByUser(cls,user_id):
+		dao=DAOClass()
+		sql="select * from notifications where user_id="+str(user_id)
+		print(sql)
+		rows=dao.getData(sql)
+		print(rows)
+		if(rows==None):
+			msg="Database Error"
+			print(msg)
+			return msg
+		elif (rows==[]):
+			msg="No Notifications Found"
+			print(msg)
+			return msg
+		else:
+			r=[cls.rowtoObj(row) for row in rows]
+			print(r)
+			return r	
+
+
+	def addNotification(self):
+		dao=DAOClass()
+		sql="insert into notifications(user_id,time,type,msg,readn) \
+		values("+str(self.user_id)+",now(),'"+self.type+"','"+self.msg+"',0)"
+		
+		print(sql)
+		r=dao.updateData(sql)
+		return r
+
+	@classmethod
+	def readNotification(cls,nid):
+		dao=DAOClass()
+		sql="update notifications set readn=1 where id="+str(nid)
+		r=dao.updateData(sql)
+		print(sql)
+		return r
+
+	@classmethod
+	def getNotificationsByUserIdAndDates(cls,user_id,startdate,enddate):
+		dao=DAOClass()
+		sql="select * from notifications where user_id="+user_id+" \
+		and time between '"+startdate+"' and '"+enddate+"'+INTERVAL 1 DAY"
+		
+		print(sql)
+		rows=dao.getData(sql)
+		print(rows)
+		if(rows==None):
+			msg="Database Error"
+			print(msg)
+			return msg
+		elif (rows==[]):
+			msg="No Notifications Found"
+			print(msg)
+			return msg
+		else:
+			r=[cls.rowtoObj(row) for row in rows]
+			print(r)
+			return r
+
 

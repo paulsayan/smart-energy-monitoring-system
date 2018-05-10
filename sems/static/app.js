@@ -64,6 +64,16 @@ myApp.config(function ($routeProvider) {
       controller: 'billsController',
       access: {restricted: true}
     })
+    .when('/settings', {
+      templateUrl: 'static/partials/settings.html',
+      controller: 'settingsController',
+      access: {restricted: true}
+    })
+    .when('/notifications', {
+      templateUrl: 'static/partials/notifications.html',
+      controller: 'notificationsController',
+      access: {restricted: true}
+    })
     .otherwise({
       redirectTo: '/'
     });

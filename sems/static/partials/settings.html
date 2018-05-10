@@ -1,4 +1,4 @@
-<div ng-controller="billsController">
+<div ng-controller="settingsController">
 
     <div class="app" id="app">
     
@@ -27,23 +27,23 @@
                       <li class="nav-item">
                       <a class="nav-link"  href="#/devices">Devices</a>
                       </li>
-
-                      <li class="nav-item active">
-                      <a class="nav-link"  href="#/bills">Bills</a>
-                      </li>
-
+    
+                      <li class="nav-item">
+                        <a class="nav-link"  href="#/bills">Bills</a>
+                        </li>
+      
                         <li class="nav-item">
                           <a class="nav-link"  href="#/profile">
                             <i class="material-icons md-24">&#xe7fd;</i>
                           </a>
                         </li>
                         
-                        <li class="nav-item">
+                        <li class="nav-item active">
                           <a class="nav-link"  href="#/settings">
                             <i class="material-icons md-24">&#xe8b8;</i>
                           </a>
                         </li>
-    
+                      
                       
                         <li class="nav-item" ng-controller="notificationsController">
                             <a class="nav-link"  href="#/notifications">
@@ -62,64 +62,37 @@
     
                     </ul>
                   </div>
-    
+
                   <br>
-    
-                  
-                  <div class="row">
-                      <div class="col-sm-6">
-                    <div class="form-group">
-                      <label for="startdate">Start Date</label>    
-                      <input type='date' id="startdate" class="form-control" ng-model="startdate" placeholder="Start Date" ng-required="required"/>
-                    </div>   
-                    </div>
-                    <div class="col-sm-6">
-                    <div class="form-group">
-                      <label for="enddate">End Date</label>    
-                      <input type='date' id="enddate" class="form-control" ng-model="enddate" placeholder="End Date" ng-required="required"/>
-                    </div>
-                  </div>
-                  <center>
-                      <button class="btn btn-fw primary" ng-click="viewAnyBill()">View Bill</button>
-                    </center>
-                  </div>
-                  
-                  <br>
-    
-                  <div class="box" ng-if="dataFound" style="background-color: white">
-    
-                      <div class="table-responsive">
-                      <table class="table table-striped b-t">
-                        <thead>
-                          <tr>
-                            
-                            <th>Device Name</th>
-                            <th>Energy Consumed (Wh)</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          
-                          <tr ng-repeat="device in devicelist">
-                            
-                            <td ng-bind="device.name"></td>
-                            <td ng-bind="device.energyc"></td>
-                                                    
-                          </tr>
-                          <tr>
-                            <td>Total Energy Consumption :</td>
-                            <td ng-bind="totalenergyc"></td>
-                          </tr>
-                        </tbody>
-                      </table>
-    
-                    </div>
+
+                <form class="p-x-xs" ng-if="settingsFound">
+                <div class="form-group row">
+                    <div class="form-group row" ng-repeat="setting in settings">
+                        <label class="col-lg-4 form-control-label" ng-bind="SettingNametoLabel(setting.setting)"></label>
+                        <div class="col-lg-4">
+                        <input class="form-control" type="text" ng-model="setting.value">
+                        </div>
+                        <div class="col-lg-2">
+                          <button class="btn btn-fw primary" >Update</button>
+                        </div>
+                </div>
                     
-                    </div>
+                    
+                </div>
+                </form>
     
-                    <div ng-if="!dataFound">
-                        <p ng-bind="errorMessage"></p><br>
-                    </div>
+                
+    <!-- 
+              <form name="form">
+                <button type="button" class="btn primary btn-block p-x-md" ng-disabled="disabled">Devices</button>
+                
+                <br>
     
+                <div ng-controller="logoutController">
+                    <button type="button" class="btn primary btn-block p-x-md" ng-click='logout()'>Logout</button>
+                </div>
+              </form>
+    -->
     
             </div>
        
@@ -130,5 +103,5 @@
         
         </div>
         
-      </div>
+</div>
       

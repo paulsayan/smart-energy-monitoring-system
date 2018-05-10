@@ -1,4 +1,4 @@
-from models import User
+from models import User,UserSetting
 from flask_restful import Resource
 from flask import jsonify,session,request
 
@@ -63,3 +63,21 @@ class UserStatusAPI(Resource):
                 return jsonify({'status': True})
         else:
             return jsonify({'status': False})
+
+
+class UserSettingsAPI(Resource):
+	def get(self,user_id):
+
+		response={}
+		uslist=UserSetting.getAllSettings(user_id)
+		if not(isinstance(uslist,list)):
+			response['result']=False
+			response['msg']="Invalid User Id"
+			return jsonify(response)
+
+		uslist_d=[us.toDict() for us in uslist]
+		response['settings']=uslist_d
+		response['result']=True
+		return jsonify(response)
+
+		

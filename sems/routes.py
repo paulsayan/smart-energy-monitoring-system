@@ -3,11 +3,12 @@ from models import Device,User
 from flask import redirect, url_for, request, render_template, jsonify, make_response, session
 from flask_restful import Resource, Api
 
-from userapi import UserLoginAPI,UserLogoutAPI,UserRegistrationAPI,UserStatusAPI
+from userapi import UserLoginAPI,UserLogoutAPI,UserRegistrationAPI,UserStatusAPI,UserSettingsAPI
 from deviceapi import DeviceByIdAPI,DevicesByOwnerAPI,DeviceStateByIdAPI
 from realtimeapi import DeviceRealTimeAPI,DevicesRealTimeAPI
 from sessionapi import SessionByIdAPI,SessionsByDeviceAPI
-from billsapi import AnyBillAPI,RealtimeBillAPI
+from billsapi import AnyBillAPI,RealtimeBillAPI,UpdateBillsAPI
+from notificationsapi import NotificationsAPI
 
 api=Api(app)
 
@@ -24,6 +25,8 @@ api.add_resource(UserLoginAPI,'/api/user/login',endpoint='user_login')
 api.add_resource(UserLogoutAPI,'/api/user/logout',endpoint='user_logout')
 api.add_resource(UserStatusAPI,'/api/user/status',endpoint='user_status')
 
+api.add_resource(UserSettingsAPI,'/api/user/<int:user_id>/settings',endpoint='user_settings')
+
 api.add_resource(DevicesByOwnerAPI,'/api/devices/<int:owner_id>',endpoint='devicesbyowner')
 api.add_resource(DeviceByIdAPI,'/api/device/<device_id>',endpoint='devicebyid')
 api.add_resource(DeviceStateByIdAPI,'/api/device/<device_id>/state',endpoint='devicestatebyid')
@@ -35,9 +38,10 @@ api.add_resource(SessionsByDeviceAPI,'/api/sessions/<device_id>',endpoint='sessi
 api.add_resource(SessionByIdAPI,'/api/session/<session_id>',endpoint='sessionbyid')
 
 api.add_resource(AnyBillAPI,'/api/anybill/<int:user_id>',endpoint='anybill')
-
 api.add_resource(RealtimeBillAPI,'/api/realtimebill/<int:user_id>',endpoint='realtimebill')
+api.add_resource(UpdateBillsAPI,'/api/updatebills',endpoint='updatebills')
 
+api.add_resource(NotificationsAPI,'/api/notifications/<int:user_id>',endpoint='notifications')
 
 """
 @app.route('/api/sessions/<device_id>/')
