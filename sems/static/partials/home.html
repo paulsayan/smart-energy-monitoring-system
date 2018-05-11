@@ -115,6 +115,32 @@
                   </div>
               </div>
 
+              <div class="row" ng-show="energyc_quota_exceeded==1">
+                  <div class="box-color p-a danger">
+                    
+                    <div class="clear">
+                        <h4 class="m-a-0 text-md" >Energy Consumption Quota Exceeded By:</h4>
+                        <h4 class="m-a-0 text-md" ng-bind="energyc_quota_exceeded_msg"></h4>
+                      <span class="text-sm"></span>
+                      
+                      <small class="text-muted"></small>
+                    </div>
+                  </div>
+              </div>
+
+              <div class="row" ng-show="energyc_quota_exceeded==0">
+                  <div class="box-color p-a warn">
+                    
+                    <div class="clear">
+                        <h4 class="m-a-0 text-md" ng-bind="energyc_quota_notexceeded_msg"></h4>
+                        <h4 class="m-a-0 text-md" >of Energy Quota Consumed</h4>
+                      <span class="text-sm"></span>
+                      
+                      <small class="text-muted"></small>
+                    </div>
+                  </div>
+              </div>
+
 
               </div>
 

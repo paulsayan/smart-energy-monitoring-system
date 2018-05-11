@@ -102,10 +102,14 @@ angular.module('myApp').controller('homeController',
         if($scope.totalenergyc>$scope.energyc_quota)
         {
           $scope.energyc_quota_exceeded=1;
+          var diff=($scope.totalenergyc-$scope.energyc_quota)/1000;
+          $scope.energyc_quota_exceeded_msg=diff.toFixed(3)+" Units or kWh";
         }
         else
         {
           $scope.energyc_quota_exceeded=0;
+          var percent=($scope.totalenergyc/$scope.energyc_quota)*100;
+          $scope.energyc_quota_notexceeded_msg=percent.toFixed(2)+" %";
         }
 
     };
