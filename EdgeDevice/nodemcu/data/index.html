@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Node Device</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <style>
+      body {
+        padding-top: 54px;
+      }
+      @media (min-width: 992px) {
+        body {
+          padding-top: 56px;
+        }
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+  	<div ng-app = "" ng-controller = "configController">
+
+  	<center>
+
+    <h3>Device Configuration</h3>
+
+    <br>
+    
+    <div ng-if="!deviceconfigfound">
+    <p ng-bind="errorMessage"></p>
+    <br>
+    </div>
+    
+    <form>
+    <table>
+    <tr>
+    	<td><label for="deviceid">Device ID:</label></td>
+    	<td><input type="text" id="deviceid" name="deviceid" ng-model="deviceid"></td>
+    </tr>
+    <tr>
+      <td><label for="deviceauthtoken">Device Authentication Token:</label></td>
+      <td><input type="text" id="deviceauthtoken" name="deviceauthtoken" ng-model="deviceauthtoken"></td>
+    </tr>
+    <tr>
+      <td><label for="serverhostname">Server Hostname:</label></td>
+      <td><input type="text" id="serverhostname" name="serverhostname" ng-model="serverhostname"></td>
+    </tr>
+      <td><label for="localapssid">Local AP SSID:</label></td>
+    	<td><input type="text" id="localapssid" name="localapssid" ng-model="localapssid"></td>
+    <tr>
+      <td><label for="localappwd">Local AP Password:</label></td>
+      <td><input type="Password" id="localappwd" name="localappwd" ng-model="localappwd"></td>
+    </tr>  
+    </table>
+    
+    <br>
+    <button id="updateconfig" ng-click="updateconfig()">Update Config</button>
+
+    </form>
+
+    <br>
+    <p ng-if="deviceConfigUpdateError>-1" ng-bind="deviceConfigUpdateMsg"></p>
+
+	</center>
+	
+    </div>
+    <!-- Bootstrap core JavaScript -->
+    <!--<script src="vendor/jquery/jquery.min.js"></script>-->
+
+    <script>
+         function configController($scope,$http) {
+
+            $scope.deviceConfigUpdateError=-1;
+            $scope.deviceconfigfound=false;
+
+            var url='loaddeviceconfig';
+            $http.get(url).then( function(response) {
+            if(response.data.result)
+            {
+              $scope.deviceid=response.data.deviceid;
+              $scope.deviceauthtoken=response.data.deviceauthtoken;
+              $scope.serverhostname=response.data.serverhostname;
+              $scope.localapssid=response.data.localapssid;
+              $scope.localappwd=response.data.localappwd;
+
+              $scope.deviceconfigfound=response.data.result;
+            }
+            else{
+              $scope.deviceconfigfound=response.data.result;
+              $scope.errorMessage="No Config found on this Device. Please add new Config.";
+            }
+      
+            console.log(response.data);
+            });
+
+            $scope.updateconfig=function()
+            {
+              var url='savedeviceconfig?'
+              +"deviceid="+$scope.deviceid+"&"
+              +"deviceauthtoken="+$scope.deviceauthtoken+"&"
+              +"serverhostname="+$scope.serverhostname+"&"
+              +"localapssid="+$scope.localapssid+"&"
+              +"localappwd="+$scope.localappwd;
+              console.log(url);
+              /*
+              $http.post(url, 
+              { "deviceid":$scope.deviceid,
+                "deviceauthtoken":$scope.deviceauthtoken,
+                "serverhostname":$scope.serverhostname,
+                "localapssid":$scope.localapssid,
+                "localappwd":$scope.localappwd,
+              
+              })
+              */
+              $http.get(url)
+              .success(function(data){
+              if(!data.result){
+                $scope.deviceConfigUpdateError=1;
+                $scope.deviceConfigUpdateMsg="Device Config Updation Error!";
+                }
+                else{
+                $scope.deviceConfigUpdateError=0;
+                $scope.deviceConfigUpdateMsg="Device Config Updated Succesfully.";
+                }
+                console.log(data);
+              })
+              .error(function(data){
+              $scope.errorMessage="Device Config Updation Error!";
+              });
+
+            };
+
+
+         }
+      </script>
+
+    
+    
+    <script src="angularjs.min.js"></script>
+    <!--<script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>-->
+      
+      
+  </body>
+
+</html>
