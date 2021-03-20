@@ -4,7 +4,7 @@ Flask==0.12.2
 Flask-MySQL==1.4.0
 Flask-RESTful==0.3.6
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 MarkupSafe==1.0
 MySQL-python==1.2.5
 pycrypto==2.6.1
